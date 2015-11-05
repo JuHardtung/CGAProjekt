@@ -1,0 +1,156 @@
+package assignment02.renderEngine;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
+import org.lwjgl.glfw.GLFWvidmode;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.libffi.Closure;
+
+import java.nio.ByteBuffer;
+
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFWErrorCallback.createPrint;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
+public class DisplayManager {
+
+    private static int width = 1280;
+    private static int height = 720;
+    private static float aspect = 16.0f/9.0f;
+
+    private static GLFWKeyCallback keyCallback;
+
+    @SuppressWarnings("unused")
+    private static GLFWWindowSizeCallback windowCallback;
+    
+    @SuppressWarnings("unused")
+    private static GLFWErrorCallback errorCallback;  // starke Referenz auf den errorCallback ist wegen Garbage Collection nötig
+    @SuppressWarnings("unused")
+    private static Closure debug;                    // starke Referenz auf debug ist wegen Garbage Collection nötig
+    // The window handle
+    private static long window;
+
+    public static long getWindow() {
+        return window;
+    }
+
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getHeight() {
+        return height;
+    }
+
+    public static GLFWKeyCallback getKeyCallback() {
+        return keyCallback;
+    }
+
+    public static void createDisplay() {
+
+        glfwSetErrorCallback(errorCallback = createPrint((System.err)));
+
+        // GLFW Initialisieren. Die meisten GLFW-Funktionen funktionieren vorher
+        // nicht.
+        if (glfwInit() != GL_TRUE)
+            throw new IllegalStateException("Unable to initialize GLFW");
+
+        // Konfigurieren des Fensters
+        glfwDefaultWindowHints(); // optional, die aktuellen Window-Hints sind
+        // bereits Standardwerte
+        glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // Das Fenster bleibt nach dem
+        // Erzeugen versteckt.
+        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // Die Fenstergröße lässt sich verändern.
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // Windowshint für den Debug Kontext
+
+        // Das Fenster erzeugen.
+        window = glfwCreateWindow(width, height, "Exercise 02 - The bunny is a lie... or is it?", NULL, NULL);
+        if (window == NULL)
+            throw new RuntimeException("Failed to create the GLFW window");
+
+        // Key-Callback aufsetzen. Wird jedes mal gerufen, wenn eine Taste
+        // gedrückt oder losgelassen wird.
+        glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {
+                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+                    glfwSetWindowShouldClose(window, GL_TRUE); 
+            }
+        });
+        
+        glfwSetWindowSizeCallback(window, windowCallback = new GLFWWindowSizeCallback() {
+			@Override
+			public void invoke(long window, int width, int height) {
+				updateWidthHeight();
+				
+			}
+        });
+
+        // Auflösung des primären Displays holen.
+        ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        // Fenster zentrieren
+        glfwSetWindowPos(window, (GLFWvidmode.width(vidmode) - width) / 2, (GLFWvidmode.height(vidmode) - height) / 2);
+
+        // Den GLFW Kontext aktuell machen.
+        glfwMakeContextCurrent(window);
+        // V-Sync aktivieren.
+
+
+        // GL Kontext unter Berücksichtigung des Betriebssystems erzeugen.
+        GL.createCapabilities();
+
+        debug = GLUtil.setupDebugMessageCallback(); // after
+        // GL.createCapabilities()
+        System.out.println("Your OpenGL version is " + glGetString(GL_VERSION));
+        // Das Fenster sichtbar machen.
+        glfwShowWindow(window);
+
+    }
+
+    public static void updateDisplay() {
+        glfwPollEvents();
+        updateWidthHeight();
+        glViewport(0, 0, width, height);
+        glfwSwapBuffers(window);
+
+    }
+
+    private static void updateWidthHeight() {
+        // TODO: initialize bytebuffers
+    	
+    	 ByteBuffer widthBuffer = BufferUtils.createByteBuffer(4);
+    	 ByteBuffer heightBuffer = BufferUtils.createByteBuffer(4);
+
+        // TODO: get window size and store in respective buffers
+
+    	 glfwGetWindowSize(window, widthBuffer, heightBuffer);
+
+    	 height = heightBuffer.getInt();
+    	 width = widthBuffer.getInt();
+    	 
+    	if (width < height){
+    		
+    		height = (int) (width / aspect);
+    
+    	} else{
+
+    		width = (int) (height * aspect);
+    	}
+    }
+
+    public static void closeDisplay() {
+        glfwDestroyWindow(window);
+        keyCallback.release();
+
+    }
+
+}
