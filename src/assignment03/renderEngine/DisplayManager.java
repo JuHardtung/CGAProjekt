@@ -1,6 +1,5 @@
 package assignment03.renderEngine;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
@@ -122,7 +121,7 @@ public class DisplayManager {
     private static void updateWidthHeight(int w, int h) {
 
         width = w;
-        height = (int)((float)w/aspect);
+        height = (int)(w/aspect);
         glfwSetWindowSize (window, width, height);
     }
 

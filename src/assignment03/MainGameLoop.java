@@ -10,16 +10,11 @@ import assignment03.renderEngine.DisplayManager;
 import assignment03.renderEngine.Loader;
 import assignment03.renderEngine.Renderer;
 import assignment03.shaders.StaticShaderProgram;
-import org.joml.Matrix4f;
-import org.joml.MatrixStack;
-import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.system.libffi.Closure;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.*;
 

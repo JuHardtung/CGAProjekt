@@ -1,7 +1,6 @@
 package assignment03.renderEngine;
 
 import assignment03.entities.Entity;
-import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;

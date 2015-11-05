@@ -57,10 +57,22 @@ public class Camera {
         // Compute new camera position //
         // TODO: Berechnen Sie den neuen Vektor vom Ursprung zur Kamera aus den Winkeln phi und theta (Polarkoordinten zu kartesischen Koordinaten) //
 
-
+    		float x = (float) (10 * Math.cos(theta) * Math.sin(phi));
+    		
+    		float y = (float) (10 * Math.sin(phi));
+    		
+    		float z = (float) (10 * Math.cos(theta) * Math.cos(theta));
+    		
         // TODO: Berechnen Sie die neue Kameraposition aus dem Vektor vom Ursprung zur Kamera und der Entfernung der Kamera vom Ursprung //
 
-
+    		Vector3f v = new Vector3f(x,y,z);
+    		
+    		
+    		System.out.println(v.length());
+ 
+    		
+    		
+    		this.viewMatrix = new Matrix4f().lookAt(x, y, z, 0, 0, 0, 0, 1, 0);
         // TODO: Berechnen und setzen Sie die neue ViewMatrix der Kamera mit der errechneten Kamera Position. Hinweis: Die Kamera blickt auf den Ursprung und die Y-Achse zeigt für die Kamera nach oben //
 
 

@@ -5,9 +5,6 @@ import java.nio.IntBuffer;
 
 import assignment02.entities.Entity;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL30;
-
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;

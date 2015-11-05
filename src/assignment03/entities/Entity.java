@@ -2,7 +2,6 @@ package assignment03.entities;
 
 import assignment03.renderEngine.RawModel;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 public class Entity {
 

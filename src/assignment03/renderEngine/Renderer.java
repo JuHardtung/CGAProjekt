@@ -4,11 +4,7 @@ import assignment03.entities.Entity;
 import assignment03.shaders.StaticShaderProgram;
 import org.joml.Matrix4f;
 import org.joml.MatrixStack;
-import org.joml.Vector3f;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
