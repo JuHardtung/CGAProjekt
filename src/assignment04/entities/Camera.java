@@ -58,10 +58,14 @@ public class Camera {
         // TODO: Berechnen Sie den neuen Vektor vom Ursprung zur Kamera aus den Winkeln phi und theta (Polarkoordinten zu kartesischen Koordinaten) //
 
     		float x = (float) (camDist * Math.cos(theta) * Math.cos(phi));
-    		
     		float y = (float) (camDist * Math.cos(theta) * Math.sin(phi));
-    		
     		float z = (float) (camDist * Math.sin(theta));
+    		
+    		
+//    		Umrechnung aus den Vorlesungsfolien 
+//    		float x = (float) (camDist * Math.cos(theta) * Math.sin(phi));
+//    		float y = (float) (camDist * Math.sin(phi));
+//    		float z = (float) (camDist * Math.cos(theta)* Math.cos(phi));
     		
         // TODO: Berechnen Sie die neue Kameraposition aus dem Vektor vom Ursprung zur Kamera und der Entfernung der Kamera vom Ursprung //
 
