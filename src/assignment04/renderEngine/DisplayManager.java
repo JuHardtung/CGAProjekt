@@ -101,13 +101,13 @@ public class DisplayManager {
                 if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                     glfwSetWindowShouldClose(window, GL_TRUE);
                 if (key == GLFW_KEY_A  && action == GLFW_PRESS)
-                    camera.setPhi((float) Math.PI * 0.01f);
+                    camera.setTheta((float) Math.PI * 0.1f);
                 if (key == GLFW_KEY_D  && action == GLFW_PRESS)
-                    camera.setPhi((float) Math.PI * -0.01f);
+                    camera.setTheta((float) Math.PI * -0.1f);
                 if (key == GLFW_KEY_W  && action == GLFW_PRESS)
-                    camera.setTheta((float) Math.PI * 0.01f);
+                    camera.setPhi((float) Math.PI * 0.1f);
                 if (key == GLFW_KEY_S  && action == GLFW_PRESS)
-                    camera.setTheta((float) Math.PI * -0.01f);
+                    camera.setPhi((float) Math.PI * -0.1f);
                 if (key == GLFW_KEY_1 && action == GLFW_PRESS)
                     renderer.setRenderState(Renderer.RenderState.CV);
                 if (key == GLFW_KEY_2 && action == GLFW_PRESS)
@@ -146,8 +146,6 @@ public class DisplayManager {
                 	
                 	camera.setTheta( (float) (anglePerPixel * deltaX));
                 	camera.setPhi((float) (anglePerPixel * deltaY));
-
-
 
 
                     // alten  Wert von mouseX und mouseY mit neuem überschreiben //
