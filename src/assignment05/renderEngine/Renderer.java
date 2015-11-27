@@ -1,8 +1,11 @@
-package assignment04.renderEngine;
+package assignment05.renderEngine;
 
-import assignment04.entities.Camera;
-import assignment04.entities.Entity;
-import assignment04.shaders.StaticShaderProgram;
+import assignment05.entities.Camera;
+import assignment05.entities.Entity;
+import assignment05.entities.Material;
+import assignment05.entities.PointLight;
+import assignment05.shaders.StaticShaderProgram;
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.MatrixStack;
 import org.joml.Vector3f;
@@ -18,12 +21,18 @@ public class Renderer {
     private Camera camera;
     private Entity cameraEntity;
     private Entity frustumEntity;
+
+    private ArrayList<PointLight> lights;
+    private Material material;
+
     public enum RenderState {
         CV, SV,
     }
+    boolean rotateLights = false;
+
     public RenderState renderState;
 	
-	public Renderer(Camera camera){
+	public Renderer(Camera camera, ArrayList<PointLight> lights, Material material){
 		// set OpenGL parameters for rendering
 		glClearColor(0, 0, 0, 1);
 		glEnable(GL_CULL_FACE);
@@ -32,15 +41,21 @@ public class Renderer {
 
         this.camera = camera;
         this.renderState = RenderState.CV;
+        this.lights = lights;
+        this.material = material;
 	}
 
-	public void render(ArrayList<Entity> entities, StaticShaderProgram shader){
+	public void render(ArrayList<Entity> entities, ArrayList<PointLight> lights, StaticShaderProgram shader){
 
         // update camera viewmatrix //
         camera.updateViewMatrix();
 
 		// use shader //
 		shader.start();
+
+        if(rotateLights) rotateLights(lights);
+
+        shader.loadLights(lights);
 
         // setup rendering according to renderstate //
         switch(renderState){
@@ -49,12 +64,8 @@ public class Renderer {
                 break;
             }
             case SV:{
-                // TODO: Setzen Sie die korrekte ModelMatrix für die cameraEntity. Hinweis: Sie kann einfach aus der ViewMatrix der Kamera berechnet werden. //
-
-            	cameraEntity.setModelMatrix(camera.getViewMatrix().invert());
-            	
-                // Hier wird die ModelMatrix der frustumEntity mit der Inversen der ProjectionMatrix multipliziert, um den Einheitswürfel in das Frustum zu transformieren. //
-                frustumEntity.setModelMatrix(camera.getViewMatrix().invert().mul(camera.getProjectionMatrix().invert()));
+                cameraEntity.setModelMatrix(camera.getViewMatrix().invert());
+                frustumEntity.setModelMatrix(new Matrix4f(cameraEntity.getModelMatrix()).mul(camera.getProjectionMatrix().invert()));
 
                 renderInSceneView(cameraEntity, shader, GL_TRIANGLES);
                 renderInSceneView(frustumEntity, shader, GL_LINES);
@@ -62,7 +73,11 @@ public class Renderer {
             }
         }
 
+
 		for (Entity e : entities){
+
+            shader.loadMaterial(material);
+            //shader.loadModelColor(e.getColor());
 
 			// bind VAO and activate VBOs //
 			RawModel model = e.getModel();
@@ -108,6 +123,7 @@ public class Renderer {
         glBindVertexArray(0);
     }
 
+
 	public void animate(ArrayList<Entity> entities){
 
 		MatrixStack s = new MatrixStack(4);
@@ -129,8 +145,33 @@ public class Renderer {
         s.popMatrix();
 	}
 
+    public void rotateLights(ArrayList<PointLight> lights){
+        // TODO: Aufgabe 5.4: Lassen Sie die Lichter um die Y-Achse um die Szene rotieren
+    }
+
+    public void switchLight(int i){
+        if (i < lights.size()) {
+            lights.get(i).setEnabled(!lights.get(i).isEnabled());
+        }
+        for(i=0; i<lights.size(); i++){
+            System.out.println("status of light "+ i + " "+lights.get(i).getName() +" "+ lights.get(i).isEnabled());
+        }
+        System.out.println("#######################\n");
+    }
+
+
+    // TODO: Aufgabe 5.5: Schreiben Sie eine Funktion, mit der Materialeigenschaften verÃ¤ndert werden kÃ¶nnen.
+
     public void setRenderState(RenderState r) {
         this.renderState = r;
+    }
+
+    public boolean isRotateLights() {
+        return rotateLights;
+    }
+
+    public void setRotateLights(boolean rotateLights) {
+        this.rotateLights = rotateLights;
     }
 
     public void setCameraEntity(Entity cameraEntity){

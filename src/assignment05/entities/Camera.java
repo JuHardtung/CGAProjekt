@@ -1,8 +1,8 @@
-package assignment04.entities;
+package assignment05.entities;
 
-import assignment04.renderEngine.DisplayManager;
-import assignment04.renderEngine.Loader;
-import assignment04.renderEngine.RawModel;
+import assignment05.renderEngine.DisplayManager;
+import assignment05.renderEngine.Loader;
+import assignment05.renderEngine.RawModel;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -14,7 +14,7 @@ public class Camera {
 
     private static final float FOV = 70;
 
-    private Matrix4f viewMatrix = new Matrix4f().lookAt(6,2,4,0,0,0,0,1,0);
+    private Matrix4f viewMatrix = new Matrix4f();
     private Matrix4f projectionMatrix = new Matrix4f();
     private Matrix4f projectionMatrixSceneView = new Matrix4f();
     private Vector3f camPos = new Vector3f();
@@ -45,43 +45,23 @@ public class Camera {
         return new Matrix4f(this.viewMatrix);
     }
 
-    public void setTheta(float dTheta){
+    public void incrementTheta(float dTheta){
         this.theta += dTheta;
     }
 
-    public void setPhi(float dPhi){
+    public void incrementPhi(float dPhi){
         this.phi += dPhi;
     }
 
     public void updateViewMatrix(){
         // Compute new camera position //
-        // TODO: Berechnen Sie den neuen Vektor vom Ursprung zur Kamera aus den Winkeln phi und theta (Polarkoordinten zu kartesischen Koordinaten) //
+        originToCameraDir = new Vector3f((float)(Math.sin(phi) * Math.cos(theta)),
+                (float)(Math.sin(theta)),
+                (float) (Math.cos(phi) * Math.cos(theta)));
 
-//    		float x = (float) (camDist * Math.cos(theta) * Math.cos(phi));
-//    		float y = (float) (camDist * Math.cos(theta) * Math.sin(phi));
-//    		float z = (float) (camDist * Math.sin(theta));
-//    		
-    		
-//    		Umrechnung aus den Vorlesungsfolien 
-    		float x = (float) (camDist * Math.sin(theta) * Math.cos(phi));
-    		float y = (float) (camDist * Math.cos(theta));
-    		float z = (float) (camDist * Math.sin(theta) * Math.sin(phi));
-    		
-        // TODO: Berechnen Sie die neue Kameraposition aus dem Vektor vom Ursprung zur Kamera und der Entfernung der Kamera vom Ursprung //
+        camPos = new Vector3f(originToCameraDir).mul(camDist);
 
-   
-    		System.out.println("X: " + x);
-    		System.out.println("Y: " + y);
-    		System.out.println("Z: " + z);
-    		System.out.println("theta: " + Math.toDegrees(theta) + "  phi: " + Math.toDegrees(phi));
-
-    		
-    		this.viewMatrix = new Matrix4f().lookAt(x, y, z, 0, 0, 0, 0, 1, 0);
-    		
-    		
-        // TODO: Berechnen und setzen Sie die neue ViewMatrix der Kamera mit der errechneten Kamera Position. Hinweis: Die Kamera blickt auf den Ursprung und die Y-Achse zeigt für die Kamera nach oben //
-
-
+        viewMatrix = new Matrix4f().lookAt(camPos, new Vector3f(0,0,0), new Vector3f(0,1,0));
     }
 
     public void setDist(float dy){

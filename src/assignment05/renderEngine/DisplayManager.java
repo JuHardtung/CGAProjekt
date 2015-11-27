@@ -1,12 +1,13 @@
-package assignment04.renderEngine;
+package assignment05.renderEngine;
 
-import assignment04.entities.Camera;
+import assignment05.entities.Camera;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.libffi.Closure;
 
 import java.nio.ByteBuffer;
+
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFWErrorCallback.createPrint;
 import static org.lwjgl.opengl.GL11.*;
@@ -59,9 +60,9 @@ public class DisplayManager {
         initOpenGL();
 
         initWindow();
-                
-        initCallbackFunctions(); // set mouse and keyboard interaction  
-        
+
+        initCallbackFunctions(); // set mouse and keyboard interaction
+
         debug = GLUtil.setupDebugMessageCallback(); // after
         // GL.createCapabilities()
         System.out.println("Your OpenGL version is " + glGetString(GL_VERSION));
@@ -69,7 +70,7 @@ public class DisplayManager {
 
 	private static void initWindow() {
 		// Das Fenster erzeugen.
-        window = glfwCreateWindow(width, height, "Exercise 04 - Big Brother is watching you", NULL, NULL);
+        window = glfwCreateWindow(width, height, "Exercise 05 - Before you, Bella, my life was like a moonless night", NULL, NULL);
         if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -78,16 +79,16 @@ public class DisplayManager {
 
         // Fenster zentrieren
         glfwSetWindowPos(window, (GLFWvidmode.width(vidmode) - width) / 2, (GLFWvidmode.height(vidmode) - height) / 2);
-        
+
         // Den GLFW Kontext aktuell machen.
-        glfwMakeContextCurrent(window);         
-        
+        glfwMakeContextCurrent(window);
+
         // GL Kontext unter Berücksichtigung des Betriebssystems erzeugen.
         GL.createCapabilities();
 
         // Synchronize to refresh rate.
         glfwSwapInterval(0);
-        
+
         // Das Fenster sichtbar machen.
         glfwShowWindow(window);
 	}
@@ -101,22 +102,39 @@ public class DisplayManager {
                 if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                     glfwSetWindowShouldClose(window, GL_TRUE);
                 if (key == GLFW_KEY_A  && action == GLFW_PRESS)
-                    camera.setPhi((float) Math.PI * 0.1f);
+                    camera.incrementPhi((float) Math.PI * 0.1f);
                 if (key == GLFW_KEY_D  && action == GLFW_PRESS)
-                    camera.setPhi((float) Math.PI * -0.1f);
+                    camera.incrementPhi((float) Math.PI * -0.1f);
                 if (key == GLFW_KEY_W  && action == GLFW_PRESS)
-                    camera.setTheta((float) Math.PI * 0.1f);
+                    camera.incrementTheta((float) Math.PI * 0.1f);
                 if (key == GLFW_KEY_S  && action == GLFW_PRESS)
-                    camera.setTheta((float) Math.PI * -0.1f);
+                    camera.incrementTheta((float) Math.PI * -0.1f);
+
                 if (key == GLFW_KEY_1 && action == GLFW_PRESS)
                     renderer.setRenderState(Renderer.RenderState.CV);
                 if (key == GLFW_KEY_2 && action == GLFW_PRESS)
                     renderer.setRenderState(Renderer.RenderState.SV);
-                if (key == GLFW_KEY_Q && action == GLFW_PRESS)
-                	camera.setDist((float) 1);
-                if (key == GLFW_KEY_Z && action == GLFW_PRESS)
-                	camera.setDist((float) -1);
-                
+
+                if (key == GLFW_KEY_R && action == GLFW_PRESS)
+                    renderer.setRotateLights(!renderer.isRotateLights());
+
+                if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+                    renderer.switchLight(0);
+                if (key == GLFW_KEY_4 && action == GLFW_PRESS)
+                    renderer.switchLight(1);
+                if (key == GLFW_KEY_5 && action == GLFW_PRESS)
+                    renderer.switchLight(2);
+                if (key == GLFW_KEY_6 && action == GLFW_PRESS)
+                    renderer.switchLight(3);
+                if (key == GLFW_KEY_7 && action == GLFW_PRESS)
+                    renderer.switchLight(4);
+                if (key == GLFW_KEY_8 && action == GLFW_PRESS)
+                    renderer.switchLight(5);
+                if (key == GLFW_KEY_9 && action == GLFW_PRESS)
+                    renderer.switchLight(6);
+                if (key == GLFW_KEY_0 && action == GLFW_PRESS)
+                    renderer.switchLight(7);
+                // TODO: Aufgabe 5.5 Rufen Sie die Funktion zur Veränderung von Materialeigenschaften nach Tastendruck auf
             }
         });
 
@@ -130,10 +148,7 @@ public class DisplayManager {
         glfwSetScrollCallback(window, scrollCallback = new GLFWScrollCallback() {
             @Override
             public void invoke(long window, double xOffset, double dw) {
-                // TODO: Setzen von camDist anhand der Mausradbewegung dw
-            	
-            	camera.setDist((float) dw);
-            	
+                camera.setDist((float)dw);
             }
         });
 
@@ -141,22 +156,11 @@ public class DisplayManager {
             @Override
             public void invoke(long window, double mx, double my) {
                 if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
-                    // TODO: Aktualisieren Sie die Kameraposition von camera (phi und theta).
-                    // mx, my: Aktuelle Position des Mauszeigers
-                    // mouseX, mouseY: Mausposition aus dem letzten Frame
-                	
-                	double anglePerPixel = 0.01;
-                	double deltaX = mouseX - mx;
-                	double deltaY = mouseY - my;
-                	
-                	camera.setTheta( (float) (anglePerPixel * deltaY));
-                	camera.setPhi((float) (anglePerPixel *  deltaX));
 
-
-                    // alten  Wert von mouseX und mouseY mit neuem überschreiben //
-
+                    camera.incrementPhi(((float) mx - mouseX) * 0.001f);
+                    camera.incrementTheta(((float) my - mouseY) * 0.001f);
                 }
-                
+
                 mouseX = (float)mx;
                 mouseY = (float)my;
             }
@@ -189,7 +193,7 @@ public class DisplayManager {
     private static void updateWidthHeight(int w, int h) {
 
         width = w;
-        height = (int)(w/aspect);
+        height = (int)((float)w/aspect);
         glfwSetWindowSize(window, width, height);
     }
 
