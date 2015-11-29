@@ -17,10 +17,10 @@ public class StaticShaderProgram extends ShaderProgram {
     private int location_viewMatrix;
     private int location_projectionMatrix;
 
-    private int location_lightPos;
-	private int location_lightColDiffuse;
-	private int location_lightColAmbient;
-	private int location_lightColSpecular;
+    private int[] location_lightPos;
+	private int[] location_lightColDiffuse;
+	private int[] location_lightColAmbient;
+	private int[] location_lightColSpecular;
 
 	private int location_matEmission;
 	private int location_matAmbient;
@@ -41,23 +41,25 @@ public class StaticShaderProgram extends ShaderProgram {
 	@Override
 	protected void getAllUniformLocations() {
 		location_modelMatrix = super.getUniformLocation("modelMatrix");
-        location_viewMatrix = super.getUniformLocation("viewMatrix");
-        location_projectionMatrix = super.getUniformLocation("projectionMatrix");
+		location_viewMatrix = super.getUniformLocation("viewMatrix");
+		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
 
-		// TODO: Aufgabe 5.1: Speicherplatz für uniform-Variablen holen (Licht und Material) und Adressen speichern
+		location_lightPos = new int[MAX_LIGHTS];
+		location_lightColAmbient = new int[MAX_LIGHTS];
+		location_lightColDiffuse = new int[MAX_LIGHTS];
+		location_lightColSpecular = new int[MAX_LIGHTS];
 
-        location_lightPos = super.getUniformLocation("modelMatrix");
-        location_lightColDiffuse = super.getUniformLocation("lightColorDiffuse>");
-        location_lightColAmbient = super.getUniformLocation("lightColorAmbient");
-        location_lightColSpecular = super.getUniformLocation("lightColorSpecular");
-        
-        location_matEmission = super.getUniformLocation("matEmission");
-        location_matAmbient = super.getUniformLocation("matAmbient");
-        location_matDiffuse = super.getUniformLocation("matDiffuse");
-        location_matSpecular = super.getUniformLocation("matSpecular");
-        location_matShininess = super.getUniformLocation("matShininess");
-        
-		// TODO: Aufgabe 5.3: Arrays mit MAX_LIGHTS initialisieren und für die Adressen der Variablen verwenden
+		for (int i = 0; i < MAX_LIGHTS; i++) {
+			location_lightPos[i] = super.getUniformLocation("lightPositions[" + i + "]");
+			location_lightColAmbient[i] = super.getUniformLocation("lightColorAmbient[" + i + "]");
+			location_lightColDiffuse[i] = super.getUniformLocation("lightColorDiffuse[" + i + "]");
+			location_lightColSpecular[i] = super.getUniformLocation("lightColorSpecular[" + i + "]");
+		}
+		location_matEmission = super.getUniformLocation("matEmission");
+		location_matAmbient = super.getUniformLocation("matAmbient");
+		location_matDiffuse = super.getUniformLocation("matDiffuse");
+		location_matSpecular = super.getUniformLocation("matSpecular");
+		location_matShininess = super.getUniformLocation("matShininess");
 
 	}
 
@@ -75,15 +77,19 @@ public class StaticShaderProgram extends ShaderProgram {
 	
 
 	public void loadLights(ArrayList<PointLight> lights) {
-		// TODO: Aufgabe 5.1: Werte des ersten Lichts in uniform-Variablen speichern
-		PointLight light = lights.get(0);
-		
-		super.loadVector(location_lightPos, light.getLightPos());
-		super.loadVector(location_lightColDiffuse, light.getLightColDiffuse());
-		super.loadVector(location_lightColAmbient, light.getLightColAmbient());
-		super.loadVector(location_lightColSpecular, light.getLightColSpecular());
-
-		// TODO: Aufgabe 5.3: Werte aller Lichter in uniform-Arrays speichern
+		for (int i = 0; i < MAX_LIGHTS; i++) {
+			if (i < lights.size() && lights.get(i).isEnabled()) {
+				super.loadVector(location_lightPos[i], lights.get(i).getLightPos());
+				super.loadVector(location_lightColAmbient[i], lights.get(i).getLightColAmbient());
+				super.loadVector(location_lightColDiffuse[i], lights.get(i).getLightColDiffuse());
+				super.loadVector(location_lightColSpecular[i], lights.get(i).getLightColSpecular());
+			} else {
+				super.loadVector(location_lightPos[i], new Vector3f(0, 0, 0));
+				super.loadVector(location_lightColAmbient[i], new Vector3f(0, 0, 0));
+				super.loadVector(location_lightColDiffuse[i], new Vector3f(0, 0, 0));
+				super.loadVector(location_lightColSpecular[i], new Vector3f(0, 0, 0));
+			}
+		}
 	}
 
 	public void loadModelMatrix(Matrix4f matrix){

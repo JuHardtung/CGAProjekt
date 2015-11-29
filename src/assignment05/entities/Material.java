@@ -1,5 +1,8 @@
 package assignment05.entities;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import org.joml.Vector3f;
 
 
@@ -7,6 +10,8 @@ import org.joml.Vector3f;
  * Created by bryan on 11.11.2015.
  */
 public class Material {
+	private final float STEP = 0.01f;
+	private final NumberFormat DEFAULT = new DecimalFormat("0.00");
     private Vector3f emission = new Vector3f(0, 0, 0);
     private Vector3f ambient = new Vector3f(1, 1, 1);
     private Vector3f diffuse = new Vector3f(1, 1, 1);
@@ -61,4 +66,70 @@ public class Material {
     public void setShininess(float shininess) {
         this.shininess = shininess;
     }
+    
+    
+	@Override
+	public String toString() {
+		return "Material [emission=" + emission.toString(DEFAULT) + ", ambient=" + ambient.toString(DEFAULT) + ", diffuse=" + diffuse.toString(DEFAULT) + ", specular="
+				+ specular.toString(DEFAULT) + ", shininess=" + DEFAULT.format(shininess) + "]";
+	}
+	
+	public void increaseEmission(){
+		this.emission = increaseColor(this.emission, STEP * 5);
+	}
+	
+	public void decreaseEmission(){
+		this.emission = increaseColor(this.emission, STEP * -5);
+	}
+	
+	public void increaseAmbient(){
+		this.ambient = increaseColor(this.ambient, STEP * 5);
+	}
+	
+	public void decreaseAmbient(){
+		this.ambient = increaseColor(this.ambient, STEP * -5);
+	}
+	
+	public void increaseDiffuse(){
+		this.diffuse = increaseColor(this.diffuse, STEP * 5);
+	}
+	
+	public void decreaseDiffuse(){
+		this.diffuse = increaseColor(this.diffuse, STEP * -5);
+	}
+	
+	public void increaseSpecular(){
+		this.specular = increaseColor(this.specular, STEP * 5);
+	}
+	
+	public void decreaseSpecular(){
+		this.specular = increaseColor(this.specular, STEP * -5);
+	}
+	
+	public void increaseShininess(){
+		this.shininess = clamp(0.0f, 100.0f,this.shininess + STEP * 10 * 5);
+	}
+	
+	public void decreaseShininess(){
+		this.shininess = clamp(0.0f, 100.0f,this.shininess + STEP * 10 * -5);
+	}
+	
+	private Vector3f increaseColor(Vector3f v, float amount) {
+		float x = clamp(0.0f,1.0f,v.x+amount);
+		float y = clamp(0.0f,1.0f,v.x+amount);
+		float z = clamp(0.0f,1.0f,v.x+amount);
+
+		return new Vector3f(x, y, z);
+	}
+	
+    private float clamp(float lower, float upper, float value){
+    	if(value < lower){
+    		return lower;
+    	}
+    	if(value>upper){
+    		return upper;
+    	}
+    	return value;
+    }
+    
 }

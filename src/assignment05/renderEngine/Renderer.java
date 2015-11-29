@@ -9,8 +9,10 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.MatrixStack;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
@@ -18,6 +20,7 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 public class Renderer {
+	private Random random = new Random();
     private Camera camera;
     private Entity cameraEntity;
     private Entity frustumEntity;
@@ -147,6 +150,15 @@ public class Renderer {
 
     public void rotateLights(ArrayList<PointLight> lights){
         // TODO: Aufgabe 5.4: Lassen Sie die Lichter um die Y-Achse um die Szene rotieren
+    	
+    	MatrixStack stack = new MatrixStack(1);
+    	stack.rotateY((float) 0.0025);
+    	for (PointLight pointLight : lights) {
+    		
+    		Vector4f lightPosition = new Vector4f(pointLight.getLightPos(), 1.0f);
+    				lightPosition.mul(stack.getDirect());
+    				pointLight.setLightPos(new Vector3f(lightPosition.x,lightPosition.y, lightPosition.z));
+    	}
     }
 
     public void switchLight(int i){
@@ -162,6 +174,25 @@ public class Renderer {
 
     // TODO: Aufgabe 5.5: Schreiben Sie eine Funktion, mit der Materialeigenschaften verändert werden können.
 
+    
+    public void changeMaterial(){
+    	Material newMaterial = new Material(getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor(), random.nextFloat());
+    this.material = newMaterial;
+    System.out.println(newMaterial);
+    }
+    
+    private Vector3f getRandomColor(){
+    	Vector3f result = new Vector3f();
+    	result.x = random.nextFloat();
+    	result.y = random.nextFloat();
+    	result.z = random.nextFloat();
+    	return result;
+    }
+    
+    public Material getCurrentMaterial(){
+    	return this.material;
+    }
+    
     public void setRenderState(RenderState r) {
         this.renderState = r;
     }

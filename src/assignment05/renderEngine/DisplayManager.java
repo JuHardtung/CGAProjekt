@@ -135,6 +135,63 @@ public class DisplayManager {
                 if (key == GLFW_KEY_0 && action == GLFW_PRESS)
                     renderer.switchLight(7);
                 // TODO: Aufgabe 5.5 Rufen Sie die Funktion zur Veränderung von Materialeigenschaften nach Tastendruck auf
+          
+                //Emission
+                if (key == GLFW_KEY_Z &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().increaseEmission();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Emission
+                if (key == GLFW_KEY_X &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().decreaseEmission();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Ambient
+                if (key == GLFW_KEY_C &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().increaseAmbient();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Ambient
+                if (key == GLFW_KEY_V &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().decreaseAmbient();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Diffuse
+                if (key == GLFW_KEY_B &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().increaseDiffuse();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Diffuse
+                if (key == GLFW_KEY_N &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().decreaseDiffuse();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Specular
+                if (key == GLFW_KEY_F &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().increaseSpecular();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Specular
+                if (key == GLFW_KEY_G &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().decreaseSpecular();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Shininess
+                if (key == GLFW_KEY_H &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().increaseShininess();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Shininess
+                if (key == GLFW_KEY_J &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.getCurrentMaterial().decreaseShininess();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                //Random
+                if (key == GLFW_KEY_M &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
+                	renderer.changeMaterial();
+                	System.out.println(renderer.getCurrentMaterial().toString());
+                }
+                
             }
         });
 
