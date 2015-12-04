@@ -114,7 +114,7 @@ public class MainGameLoop {
 //				new Vector3f(0.1f,0.1f,1.0f),
 //				new Vector3f(1.0f,1.0f,1.0f),
 //				40.0f);
-
+//
 //		Material redMetal = new Material(new Vector3f(0,0,0),
 //				new Vector3f(0.0f,0,0),
 //				new Vector3f(1.0f,0.0f,0.0f),

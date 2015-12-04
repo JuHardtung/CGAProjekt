@@ -136,6 +136,14 @@ public class DisplayManager {
                     renderer.switchLight(7);
                 // TODO: Aufgabe 5.5 Rufen Sie die Funktion zur Veränderung von Materialeigenschaften nach Tastendruck auf
           
+                if (key == GLFW_KEY_T && action == GLFW_PRESS)
+                    renderer.switchMaterial(1);
+                if (key == GLFW_KEY_Y && action == GLFW_PRESS)
+                    renderer.switchMaterial(2);
+                if (key == GLFW_KEY_U && action == GLFW_PRESS)
+                    renderer.switchMaterial(3);
+                if (key == GLFW_KEY_I && action == GLFW_PRESS)
+                    renderer.switchMaterial(4);
                 //Emission
                 if (key == GLFW_KEY_Z &&(action==GLFW_PRESS || action == GLFW_REPEAT)){
                 	renderer.getCurrentMaterial().increaseEmission();

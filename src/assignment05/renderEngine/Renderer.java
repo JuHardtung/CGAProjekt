@@ -152,7 +152,7 @@ public class Renderer {
         // TODO: Aufgabe 5.4: Lassen Sie die Lichter um die Y-Achse um die Szene rotieren
     	
     	MatrixStack stack = new MatrixStack(1);
-    	stack.rotateY((float) 0.0025);
+    	stack.rotateY((float) (Math.PI*2)/1200);
     	for (PointLight pointLight : lights) {
     		
     		Vector4f lightPosition = new Vector4f(pointLight.getLightPos(), 1.0f);
@@ -173,7 +173,48 @@ public class Renderer {
 
 
     // TODO: Aufgabe 5.5: Schreiben Sie eine Funktion, mit der Materialeigenschaften verändert werden können.
+public void switchMaterial(int i){
 
+	switch(i){
+	
+	case 1:
+		material = new Material(new Vector3f(0,0,0),
+				new Vector3f(0.0f,0.0f,0.0f),
+				new Vector3f(1.0f,1.0f,1.0f),
+				new Vector3f(1.0f,1.0f,1.0f),
+				60.0f);
+		System.out.println("Material: White Ceramic");
+		break;
+	
+	case 2:
+		material = new Material(new Vector3f(0,0,0),
+				new Vector3f(0.0f,0.0f,0.1f),
+				new Vector3f(0.1f,0.1f,1.0f),
+				new Vector3f(1.0f,1.0f,1.0f),
+				40.0f);
+		System.out.println("Material: Blue Plastic");
+
+		break;
+
+	case 3:
+		material = new Material(new Vector3f(0,0,0),
+				new Vector3f(0.0f,0,0),
+				new Vector3f(1.0f,0.0f,0.0f),
+				new Vector3f(1,1,1),
+				10.0f);
+		System.out.println("Material: Red Metal");
+		break;
+
+	case 4:
+		material = new Material(new Vector3f(0,0,0),
+				new Vector3f(0,0,0),
+				new Vector3f(0.0f,1.0f,0.0f),
+				new Vector3f(0,0,1),
+				20.0f);
+		System.out.println("Material: FlipFlop Green");
+		break;
+	}
+}
     
     public void changeMaterial(){
     	Material newMaterial = new Material(getRandomColor(), getRandomColor(), getRandomColor(), getRandomColor(), random.nextFloat());

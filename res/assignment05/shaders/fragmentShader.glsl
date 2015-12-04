@@ -33,7 +33,7 @@ vec4 getColorByLight(int index){
 		vec3 normalizedToCamera = normalize(toCamera);
 		//Pro Lichtquelle	
 		vec3 normalizedToLight = normalize(toLight[index]);
-		vec3 normalizedH = normalize(normalizedToCamera + normalizedToLight)	;
+		vec3 normalizedH = normalize(normalizedToCamera + normalizedToLight);
 		
 		//Winkelberechnung
 		float cosAlpha =  max(0.0, dot(normalizedNormal,normalizedToLight));
