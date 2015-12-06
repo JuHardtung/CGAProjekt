@@ -106,6 +106,10 @@ public class DisplayManager {
                     camera.moveForward();
                 if (key == GLFW_KEY_S  && (action == GLFW_PRESS || action == GLFW_REPEAT))
                     camera.moveBackward();
+                if (key == GLFW_KEY_A  && (action == GLFW_PRESS || action == GLFW_REPEAT))
+                    camera.moveLeft();
+                if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
+                    camera.moveRight();
             }
         });
 
